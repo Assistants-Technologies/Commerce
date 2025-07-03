@@ -1,0 +1,105 @@
+############################
+# OS-SPECIFIC
+############################
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+*.swp
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+.nfs*
+
+############################
+# IDEs / Editors
+############################
+
+# JetBrains Rider / IntelliJ
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Visual Studio Code
+.vscode/
+
+# Visual Studio (Windows)
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# MonoDevelop
+*.userprefs
+
+############################
+# .NET BUILD OUTPUTS
+############################
+
+bin/
+obj/
+TestResults/
+*.nupkg
+*.snupkg
+
+# NUKE build cache
+.nuke/temp/
+
+############################
+# PACKAGES
+############################
+
+# NuGet
+packages/
+*.nuspec
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# dotnet restore artifacts
+project.assets.json
+
+############################
+# OTHERS
+############################
+
+*.log
+*.tmp
+*.bak
+*.db
+*.cache
+*.pid
+*.orig
+*.rej
+
+# Rider and Roslyn analyzers
+.idea/
+.analyzers/
+*.DotSettings.user
+
+# Local tooling
+tools/
+.env
+.env.*
+*.launchSettings.json
+
+############################
+# Solution-level folders
+############################
+
+*.sln.iml
+*.sln.cache/
+*.sln.DotSettings.user
