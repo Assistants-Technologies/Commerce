@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package common;
+
+option csharp_namespace = "Infra.Grpc.Common";
+
+message Identifier {
+  string id = 1;
+}
+
+message StatusResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ErrorDetail {
+  string code = 1; 
+  string field = 2;
+  string description = 3;
+}
+
+message Meta {
+  string correlation_id = 1;
+  string source_service = 2;
+}
