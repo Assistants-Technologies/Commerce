@@ -1,0 +1,9 @@
+services:
+  web-server:
+    container_name: infra.modules.webserver
+    build: ./Modules/WebServer
+    ports:
+      - "80:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ENVIRONMENT}
+      - ASPNETCORE_URLS=${WEB_SERVER_URLS}
