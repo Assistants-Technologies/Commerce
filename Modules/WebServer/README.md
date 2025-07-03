@@ -1,1 +1,0 @@
-A simple web server used to serve as a starting point for the Infrastructure.

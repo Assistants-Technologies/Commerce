@@ -1,9 +1,39 @@
-services:
-  web-server:
-    container_name: infra.modules.webserver
-    build: ./Modules/WebServer
-    ports:
-      - "80:80"
+version: "3.9"
+services:  
+  core-identity:
+    container_name: infra.modules.coreidentity
+    build: ./Modules/CoreIdentity
     environment:
       - ASPNETCORE_ENVIRONMENT=${ENVIRONMENT}
       - ASPNETCORE_URLS=${WEB_SERVER_URLS}
+      - ConnectionStrings__DefaultConnection=Host=infra.modules.db;Database=identity_db;Username=postgres;Password=postgres
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16
+    container_name: infra.modules.db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: identity_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  
+  nginx:
+    image: nginx:alpine
+    container_name: infra.proxy.nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Proxy/Nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./Proxy/Nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+        - core-identity
+
+volumes:
+  pgdata:
