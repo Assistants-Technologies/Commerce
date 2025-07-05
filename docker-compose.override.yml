@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  idp:
+    container_name: Infra.Modules.IdentityProvider.Dev
+    build:
+      context: ./Modules/IdentityProvider
+      dockerfile: Dockerfile.dev
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ENVIRONMENT:-Development}
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=true
+      - ASPNETCORE_URLS=${IDP_SERVER_URLS}
+      - DOTNET_USE_POLLING_FILE_WATCHER=true
+      - COMPANY_NAME=${COMPANY_NAME}
+      - SUPPORT_EMAIL=${SUPPORT_EMAIL}
+    volumes:
+      - ./Modules/IdentityProvider/Pages:/src/Pages
+      - ./Modules/IdentityProvider/Data:/src/Data
+      - ./Modules/IdentityProvider/Program.cs:/src/Program.cs
+      - ./Modules/IdentityProvider/wwwroot:/src/wwwroot
+      - /tmp/NuGetScratch:/tmp/NuGetScratch
+    depends_on:
+      - idp_postgres
+      - idp_redis
