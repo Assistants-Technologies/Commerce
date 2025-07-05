@@ -1,18 +1,18 @@
-version: "3.9"
-services:  
-  core-identity:
-    container_name: infra.modules.coreidentity
-    build: ./Modules/CoreIdentity
+services:
+  idp:
+    container_name: Infra.Modules.IdentityProvider
+    build: ./Modules/IdentityProvider
     environment:
       - ASPNETCORE_ENVIRONMENT=${ENVIRONMENT}
-      - ASPNETCORE_URLS=${WEB_SERVER_URLS}
-      - ConnectionStrings__DefaultConnection=Host=infra.modules.db;Database=identity_db;Username=postgres;Password=postgres
+      - ASPNETCORE_URLS=${IDP_SERVER_URLS}
+      - IDP_CONNECTION_STRING=${IDP_CONNECTION_STRING}
     depends_on:
-      - postgres
+      - idp_postgres
+      - idp_redis
 
-  postgres:
+  idp_postgres:
+    container_name: Infra.Modules.IdentityProvider.Postgres
     image: postgres:16
-    container_name: infra.modules.db
     restart: always
     ports:
       - "5432:5432"
@@ -21,11 +21,18 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - idp_postgres_data:/var/lib/postgresql/data
+    
+  idp_redis:
+    container_name: Infra.Modules.IdentityProvider.Redis
+    image: redis:7-alpine
+    restart: always
+    volumes:
+      - idp_redis_data:/data
   
-  nginx:
+  proxy_nginx:
+    container_name: Infra.Proxy.Nginx
     image: nginx:alpine
-    container_name: infra.proxy.nginx
     ports:
       - "80:80"
       - "443:443"
@@ -33,7 +40,8 @@ services:
       - ./Proxy/Nginx/conf.d:/etc/nginx/conf.d:ro
       - ./Proxy/Nginx/certs:/etc/nginx/certs:ro
     depends_on:
-        - core-identity
+        - idp
 
 volumes:
-  pgdata:
+  idp_postgres_data:
+  idp_redis_data:
