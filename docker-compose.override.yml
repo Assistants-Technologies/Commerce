@@ -13,11 +13,45 @@ services:
       - DOTNET_USE_POLLING_FILE_WATCHER=true
       - COMPANY_NAME=${COMPANY_NAME}
       - SUPPORT_EMAIL=${SUPPORT_EMAIL}
+      - IDP_ACC_PANEL_URL=${IDP_ACC_PANEL_URL}
+      - IDP_ACC_PANEL_SCOPES=${IDP_ACC_PANEL_SCOPES}
+      - IDP_ACC_PANEL_AUTHORITY=${IDP_ACC_PANEL_AUTHORITY}
+      - IDP_ACC_PANEL_CLIENT_DISPLAY_NAME=${IDP_ACC_PANEL_CLIENT_DISPLAY_NAME}
+      - IDP_ACC_PANEL_CLIENT_SECRET=${IDP_ACC_PANEL_CLIENT_SECRET}
+      - IDP_ACC_PANEL_REDIRECT_URI=${IDP_ACC_PANEL_REDIRECT_URI}
+      - IDP_ACC_PANEL_POST_LOGOUT_REDIRECT_URI=${IDP_ACC_PANEL_POST_LOGOUT_REDIRECT_URI}
     volumes:
       - ./Modules/IdentityProvider/Pages:/src/Pages
       - ./Modules/IdentityProvider/Data:/src/Data
       - ./Modules/IdentityProvider/Program.cs:/src/Program.cs
       - ./Modules/IdentityProvider/wwwroot:/src/wwwroot
+      - /tmp/NuGetScratch:/tmp/NuGetScratch
+    depends_on:
+      - idp_postgres
+      - idp_redis
+  acc_panel:
+    container_name: Infra.Modules.AccountPanel.Dev
+    build:
+      context: ./Modules/AccountPanel
+      dockerfile: Dockerfile.dev
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ENVIRONMENT:-Development}
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=true
+      - ASPNETCORE_URLS=${IDP_SERVER_URLS}
+      - DOTNET_USE_POLLING_FILE_WATCHER=true
+      - COMPANY_NAME=${COMPANY_NAME}
+      - SUPPORT_EMAIL=${SUPPORT_EMAIL}
+      - IDP_ACC_PANEL_URL=${IDP_ACC_PANEL_URL}
+      - IDP_ACC_PANEL_SCOPES=${IDP_ACC_PANEL_SCOPES}
+      - IDP_ACC_PANEL_AUTHORITY=${IDP_ACC_PANEL_AUTHORITY}
+      - IDP_ACC_PANEL_CLIENT_DISPLAY_NAME=${IDP_ACC_PANEL_CLIENT_DISPLAY_NAME}
+      - IDP_ACC_PANEL_CLIENT_SECRET=${IDP_ACC_PANEL_CLIENT_SECRET}
+      - IDP_ACC_PANEL_REDIRECT_URI=${IDP_ACC_PANEL_REDIRECT_URI}
+      - IDP_ACC_PANEL_POST_LOGOUT_REDIRECT_URI=${IDP_ACC_PANEL_POST_LOGOUT_REDIRECT_URI}
+    volumes:
+      - ./Modules/AccountPanel/Pages:/src/Pages
+      - ./Modules/AccountPanel/Program.cs:/src/Program.cs
+      - ./Modules/AccountPanel/wwwroot:/src/wwwroot
       - /tmp/NuGetScratch:/tmp/NuGetScratch
     depends_on:
       - idp_postgres
