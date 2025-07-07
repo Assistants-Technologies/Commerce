@@ -1,0 +1,5 @@
+creation_rules:
+  - path_regex: '.*\.(pfx|pem)$'
+    encrypted_regex: '^(data|stringData)$'
+    pgp:
+      - 36EC0F83FA5E36F0E87A9E0E436F52BFF4F88902

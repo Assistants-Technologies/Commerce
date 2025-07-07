@@ -4,6 +4,8 @@ services:
     build:
       context: ./Modules/IdentityProvider
       dockerfile: Dockerfile
+    volumes:
+      - ./Proxy/Nginx/certs:/https:ro
     environment:
       - ASPNETCORE_ENVIRONMENT=${ENVIRONMENT:-Production}
       - ASPNETCORE_URLS=${IDP_SERVER_URLS}
@@ -12,7 +14,7 @@ services:
       - SUPPORT_EMAIL=${SUPPORT_EMAIL}
       - IDP_ACC_PANEL_URL=${IDP_ACC_PANEL_URL}
       - IDP_ACC_PANEL_SCOPES=${IDP_ACC_PANEL_SCOPES}
-      - IDP_ACC_PANEL_AUTHORITY=${IDP_ACC_PANEL_AUTHORITY}
+      - IDP_ISSUER=${IDP_ISSUER}
       - IDP_ACC_PANEL_CLIENT_DISPLAY_NAME=${IDP_ACC_PANEL_CLIENT_DISPLAY_NAME}
       - IDP_ACC_PANEL_CLIENT_SECRET=${IDP_ACC_PANEL_CLIENT_SECRET}
       - IDP_ACC_PANEL_REDIRECT_URI=${IDP_ACC_PANEL_REDIRECT_URI}
@@ -20,6 +22,10 @@ services:
     depends_on:
       - idp_postgres
       - idp_redis
+    networks:
+      Infra.Proxy.Network:
+        aliases:
+          - identity.assts.tech
 
   idp_postgres:
     container_name: Infra.Modules.IdentityProvider.Postgres
@@ -46,6 +52,8 @@ services:
     build:
       context: ./Modules/AccountPanel
       dockerfile: Dockerfile
+    volumes:
+      - ./Proxy/Nginx/certs:/https:ro
     environment:
       - ASPNETCORE_ENVIRONMENT=${ENVIRONMENT:-Production}
       - ASPNETCORE_URLS=${ACCOUNTING_PANEL_SERVER_URLS}
@@ -53,13 +61,17 @@ services:
       - COMPANY_NAME=${COMPANY_NAME}
       - IDP_ACC_PANEL_URL=${IDP_ACC_PANEL_URL}
       - IDP_ACC_PANEL_SCOPES=${IDP_ACC_PANEL_SCOPES}
-      - IDP_ACC_PANEL_AUTHORITY=${IDP_ACC_PANEL_AUTHORITY}
+      - IDP_ISSUER=${IDP_ISSUER}
       - IDP_ACC_PANEL_CLIENT_DISPLAY_NAME=${IDP_ACC_PANEL_CLIENT_DISPLAY_NAME}
       - IDP_ACC_PANEL_CLIENT_SECRET=${IDP_ACC_PANEL_CLIENT_SECRET}
       - IDP_ACC_PANEL_REDIRECT_URI=${IDP_ACC_PANEL_REDIRECT_URI}
       - IDP_ACC_PANEL_POST_LOGOUT_REDIRECT_URI=${IDP_ACC_PANEL_POST_LOGOUT_REDIRECT_URI}
     depends_on:
       - idp
+    networks:
+      Infra.Proxy.Network:
+        aliases:
+          - account.assts.tech
 
   proxy_nginx:
     container_name: Infra.Proxy.Nginx
@@ -72,7 +84,13 @@ services:
       - ./Proxy/Nginx/certs:/etc/nginx/certs:ro
     depends_on:
       - idp
+    networks:
+      Infra.Proxy.Network:
 
 volumes:
   idp_postgres_data:
   idp_redis_data:
+
+networks:
+  Infra.Proxy.Network:
+    driver: bridge

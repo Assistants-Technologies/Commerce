@@ -1,0 +1,25 @@
+@page
+@model LoginCallbackModel
+@{
+    if (Model.Succeeded)
+    {
+        <p>✅ Logowanie zakończone. <a href="/">Przejdź do panelu</a></p>
+        <h3>AuthenticationProperties:</h3>
+        @if (!string.IsNullOrEmpty(Model.Json1))
+        {
+            <pre style="background:#f4f4f4;padding:8px;border-radius:4px;overflow:auto;">
+@Model.Json1
+            </pre>
+        }
+        @if (!string.IsNullOrEmpty(Model.Json2))
+        {
+            <pre style="background:#f4f4f4;padding:8px;border-radius:4px;overflow:auto;">
+@Model.Json2
+            </pre>
+        }
+    }
+    else
+    {
+        <p>❌ Logowanie nieudane.</p>
+    }
+}

@@ -1,0 +1,26 @@
+FROM node:20-alpine
+
+ENV NODE_ENV=development
+
+# Systemowe zależności (dla SWC itd.)
+RUN apk add --no-cache python3 make g++ libc6-compat
+
+WORKDIR /app
+
+# Skopiuj pliki z zależnościami
+COPY package.json yarn.lock ./
+
+# Instaluj WSZYSTKO (łącznie z devDependencies)
+RUN yarn install --frozen-lockfile
+
+# SWC rebuild (obowiązkowe na Alpine)
+RUN yarn add --dev @swc/core && yarn rebuild @swc/core
+
+# Skopiuj cały projekt
+COPY . .
+
+# Otwórz port
+EXPOSE 4445
+
+# Domyślna komenda
+CMD ["yarn", "dev"]
