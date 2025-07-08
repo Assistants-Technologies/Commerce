@@ -1,6 +1,8 @@
 #!/bin/bash
 
-for file in Proxy/Nginx/certs/*.pem Proxy/Nginx/certs/*.pfx; do
+cd "$(dirname "$0")"
+
+for file in ../Platform/Nginx/certs/*.{pem,pfx}; do
   [ -f "$file" ] || continue
   echo "Encrypting $file..."
   sops -e "$file" > "$file.enc"

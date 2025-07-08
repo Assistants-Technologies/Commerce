@@ -103,3 +103,14 @@ tools/
 *.sln.iml
 *.sln.cache/
 *.sln.DotSettings.user
+
+############################
+# Certificates
+############################
+
+# Ignore unencrypted certs
+Platform/Nginx/certs/*.pem
+Platform/Nginx/certs/*.pfx
+
+# Track encrypted versions
+!Platform/Nginx/certs/*.enc
