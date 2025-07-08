@@ -1,0 +1,27 @@
+FROM node:22-alpine
+
+ENV NODE_ENV=development
+ENV TS_NODE_COMPILER="typescript"
+
+# Włącz zależności dla buildowania TS i native addons
+RUN apk add --no-cache python3 make g++ libc6-compat
+
+WORKDIR /app
+
+# Skopiuj pliki z zależnościami
+COPY package.json yarn.lock ./
+
+# Instaluj WSZYSTKO (łącznie z devDependencies)
+RUN yarn install
+
+# Skopiuj cały projekt
+COPY . .
+
+# Rebuild @swc/core
+RUN npm rebuild @swc/core || echo "SWC rebuild failed, ignoring..."
+
+# Otwórz port
+EXPOSE 4445
+
+# Domyślna komenda
+CMD ["yarn", "dev"]
