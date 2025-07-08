@@ -1,116 +1,28 @@
-############################
-# OS-SPECIFIC
-############################
-
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-Icon?
-._*
-.Spotlight-V100
-.Trashes
-*.swp
-
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-*.lnk
-
-# Linux
-*~
-.nfs*
-
-############################
-# IDEs / Editors
-############################
-
-# JetBrains Rider / IntelliJ
-.idea/
-*.sublime-workspace
-*.sublime-project
-
-# Visual Studio Code
-.vscode/
-
-# Visual Studio (Windows)
-.vs/
-*.user
-*.suo
-*.userosscache
-*.sln.docstates
-
-# MonoDevelop
-*.userprefs
-
-############################
-# .NET BUILD OUTPUTS
-############################
-
-bin/
-obj/
-TestResults/
-*.nupkg
-*.snupkg
-
-# NUKE build cache
-.nuke/temp/
-
-############################
-# PACKAGES
-############################
-
-# NuGet
-packages/
-*.nuspec
-project.lock.json
-project.fragment.lock.json
-artifacts/
-
-# dotnet restore artifacts
-project.assets.json
-
-############################
-# OTHERS
-############################
-
-*.log
-*.tmp
-*.bak
-*.db
-*.cache
-*.pid
-*.orig
-*.rej
-
-# Rider and Roslyn analyzers
-.idea/
-.analyzers/
-*.DotSettings.user
-
-# Local tooling
-tools/
+/dist
 .env
-.env.*
-*.launchSettings.json
+.DS_Store
+/uploads
+/node_modules
+yarn-error.log
 
-############################
-# Solution-level folders
-############################
+.idea
 
-*.sln.iml
-*.sln.cache/
-*.sln.DotSettings.user
+coverage
 
-############################
-# Certificates
-############################
+!src/**
 
-# Ignore unencrypted certs
-Platform/Nginx/certs/*.pem
-Platform/Nginx/certs/*.pfx
+./tsconfig.tsbuildinfo
+medusa-db.sql
+build
+.cache
 
-# Track encrypted versions
-!Platform/Nginx/certs/*.enc
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+.medusa
+
+certs
