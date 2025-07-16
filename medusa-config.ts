@@ -31,6 +31,27 @@ module.exports = defineConfig({
           },
         ],
       }
+    },
+    {
+      resolve: "@medusajs/medusa/auth",
+      options: {
+        providers: [
+          {
+            resolve: "@medusajs/medusa/auth-emailpass",
+            id: "emailpass",
+          },
+          {
+            resolve: join(__dirname, "./src/modules/openid"),
+            id: "openid",
+            options: {
+              issuer_url: process.env.IDP_ISSUER,
+              client_id: process.env.COMMERCE_CLIENT_ID,
+              client_secret: process.env.COMMERCE_CLIENT_SECRET,
+              redirect_uri: process.env.COMMERCE_REDIRECT_URI,
+            },
+          },
+        ],
+      },
     }
   ],
   admin: {
